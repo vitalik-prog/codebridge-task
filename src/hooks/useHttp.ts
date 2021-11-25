@@ -1,10 +1,8 @@
 import {useCallback, useState} from "react";
 
 export const useHttp = () => {
-  const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
   const request = useCallback(async (url, method = 'GET', body = null, headers = {}): Promise<unknown> => {
-    setLoading(true)
     try {
       if (body) {
         body = JSON.stringify(body)
@@ -15,11 +13,9 @@ export const useHttp = () => {
       if (!response.ok) {
         throw new Error(data.message || 'Something wrong')
       }
-      setLoading(false)
 
       return data
     } catch (e: any) {
-      setLoading(false)
       setError(e.message)
       throw e
     }
@@ -29,5 +25,5 @@ export const useHttp = () => {
     setError(null)
   }, [])
 
-  return { loading, request, error, clearError }
+  return { request, error, clearError }
 }
