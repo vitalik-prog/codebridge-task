@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useState} from 'react';
+import React, {FC, useCallback, useEffect, useState} from 'react';
 import {Grid} from "@mui/material";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
@@ -7,6 +7,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import {useDebounce} from "../../hooks";
 import {useDispatch} from "react-redux";
 import {getArticles} from "../../store/actions";
+import {Path} from "../../common/enums";
 
 const style = {
   header: {
@@ -28,7 +29,7 @@ const style = {
 
 const SearchBlock: FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const debouncedSearchTerm = useDebounce(searchTerm, 800);
+  const debouncedSearchTerm = useDebounce(searchTerm, 1500);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -38,6 +39,17 @@ const SearchBlock: FC = () => {
     },
     [debouncedSearchTerm, dispatch]
   );
+
+  const enterPressCatcher = useCallback(e => {
+    if (e.key === 'Enter') {
+      dispatch(getArticles(searchTerm))
+    }
+  }, [dispatch, searchTerm])
+
+  useEffect(() => {
+    document.addEventListener('keydown', enterPressCatcher)
+    return () => document.removeEventListener('keydown', enterPressCatcher)
+  }, [enterPressCatcher])
 
   return (
     <Grid container direction={'column'}>
@@ -49,6 +61,7 @@ const SearchBlock: FC = () => {
       </Typography>
       <TextField
         id="input-with-icon-textfield"
+        defaultValue={Path.API_DEFAULT_KEYWORDS_TO_FIND}
         sx={style.input}
         placeholder={'Search'}
         InputLabelProps={{

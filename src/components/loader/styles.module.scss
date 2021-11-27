@@ -10,7 +10,7 @@
 .spinner {
   border: 10px solid #f3f3f3;
   border-radius: 50%;
-  border-top: 10px solid #190dd3;
+  border-top: 10px solid var(--color-primary-text-dark);
   width: 80px;
   height: 80px;
   animation: spin 2s linear infinite;

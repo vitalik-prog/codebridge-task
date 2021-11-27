@@ -7,7 +7,6 @@ type LongTextProps = {
 }
 
 const LongText: FC<LongTextProps> = ({ content, limit}) => {
-  console.log(content)
   const toShow = content ? content.substring(0, limit) + "..." : '';
   return (
     <Typography sx={{ color: 'primary.main' }}>

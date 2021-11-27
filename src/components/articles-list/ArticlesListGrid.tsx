@@ -1,14 +1,17 @@
-import React, {FC} from 'react';
+import React, {FC, useEffect} from 'react';
 import {Button, Card, CardActions, CardContent, CardMedia, Grid, Typography} from "@mui/material";
-import {Article} from "../../common/types/article";
 import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
 import CalendarTodayOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined';
 import LongText from "../long-text/LongText";
 import {DateFormatType} from "../../common/enums/date";
 import {getFormattedDate} from "../../helpers";
 import {DEFAULT_IMAGE_URL} from "../../common/constants";
-import Paper from "@mui/material/Paper";
-import Container from "@mui/material/Container";
+import {useAppSelector} from "../../hooks";
+import {useDispatch} from "react-redux";
+import {getArticles} from "../../store/articles/actions";
+import {DataStatus, Path} from "../../common/enums/app";
+import {Loader} from "../index";
+import HighLighter from "../highlighter";
 
 const style = {
   card: {
@@ -32,7 +35,7 @@ const style = {
     padding: '0 25px 25px 17px',
   },
   header: {
-    height: '55px',
+    height: '70px',
     marginBottom: '20px',
     overflow: 'hidden',
     display: '-webkit-box',
@@ -41,12 +44,23 @@ const style = {
   }
 };
 
-type ArticlesListGridProps = {
-  articles: Article[]
-}
+const ArticlesListGrid: FC = () => {
+  const {articles, dataStatus} = useAppSelector(({articles}) => ({
+    articles: articles.articles,
+    dataStatus: articles.dataStatus,
+  }));
+  const dispatch = useDispatch();
 
-const ArticlesListGrid: FC<ArticlesListGridProps> = ({ articles }) => {
+  useEffect(() => {
+    dispatch(getArticles(Path.API_DEFAULT_KEYWORDS_TO_FIND));
+  }, [dispatch]);
+
+  if (dataStatus === DataStatus.PENDING) {
+    return <Loader />
+  }
+
   const isArticlesExist = Boolean(articles.length);
+
   if (!isArticlesExist) {
     return (
       <Grid container sx={{ flexGrow: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -59,8 +73,8 @@ const ArticlesListGrid: FC<ArticlesListGridProps> = ({ articles }) => {
 
   return (
     <Grid container spacing={6}>
-      {articles.map((article) => (
-        <Grid item key={article.publishedAt} xs={12} sm={6} md={4}>
+      {articles.map((article, index) => (
+        <Grid item key={index} xs={12} sm={6} md={4}>
           <Card
             sx={style.card}
           >
@@ -84,10 +98,10 @@ const ArticlesListGrid: FC<ArticlesListGridProps> = ({ articles }) => {
               </Typography>
               <Typography
                 color={'textSecondary'}
-                variant={'h5'}
+                variant={"body2"}
                 sx={style.header}
               >
-                {article.title}
+                <HighLighter text={article.title} />
               </Typography>
               <LongText content={article.description} limit={100} />
             </CardContent>
