@@ -1,9 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit';
 import rootReducer from './rootReducer';
-import {useHttp} from "../hooks";
 
 const extraArgument = {
-  useHttp
+
 };
 
 const store = configureStore({

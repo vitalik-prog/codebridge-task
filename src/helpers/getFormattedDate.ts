@@ -1,13 +1,8 @@
-import { Article } from '../common/types';
+import { format } from 'date-fns';
+import {DateFormatType} from "../common/enums/date";
 
-const getFormattedDate = (article: Article): string => {
-  const month = new Date(article.publishedAt).toLocaleString('en-EN', { month: 'long' });
-  const year = new Date(article.publishedAt).toLocaleString('en-EN', { year: 'numeric' });
-  let date = new Date(article.publishedAt).toLocaleString('en-EN', { day: 'numeric' });
-  if (Number(date) < 10) {
-    date = '0' + date;
-  }
-  return `${date} ${month}, ${year}`;
+const getFormattedDate = (date: Date, formatType: DateFormatType): string => {
+  return format(date, formatType);
 };
 
 export { getFormattedDate };

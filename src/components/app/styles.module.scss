@@ -1,5 +1,9 @@
 .app {
   width: 1440px;
   margin: 0 auto;
-  padding: 50px 75px;
+  padding: 0 75px;
+  background-color: white;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
