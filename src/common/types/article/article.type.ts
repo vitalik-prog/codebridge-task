@@ -1,11 +1,11 @@
 type Article = {
   author: string,
   content: string,
-  description: string,
+  description: string | null,
   publishedAt: string,
   title: string,
   url: string,
-  urlToImage: string,
+  urlToImage: string | null,
   source: {
     id: string,
     name: string
