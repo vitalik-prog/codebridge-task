@@ -2,48 +2,18 @@ import React, {FC, useEffect} from 'react';
 import {Button, Card, CardActions, CardContent, CardMedia, Grid, Typography} from "@mui/material";
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import CalendarTodayOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined';
+import {useDispatch} from "react-redux";
+import { useNavigate } from 'react-router-dom';
 import LongText from "../long-text/LongText";
 import {DateFormatType} from "../../common/enums/date";
 import {getFormattedDate} from "../../helpers";
 import {DEFAULT_IMAGE_URL} from "../../common/constants";
 import {useAppSelector} from "../../hooks";
-import {useDispatch} from "react-redux";
-import { useNavigate } from 'react-router-dom';
 import {getArticles} from "../../store/articles/actions";
 import {DataStatus, Path} from "../../common/enums/app";
-import {Loader} from "../index";
+import {Loader, NoContent} from "../index";
 import HighLighter from "../highlighter";
-
-const style = {
-  card: {
-    height: '100%',
-    display: 'flex',
-    flexDirection: 'column' as 'column'
-  },
-  img: {
-    height: '217px'
-  },
-  cardContent: {
-    padding: '25px 25px 14px 25px',
-    flexGrow: 1
-  },
-  date: {
-    marginBottom: '24px',
-    display: 'flex',
-    alignItems: 'center'
-  },
-  cardButton: {
-    padding: '0 25px 25px 17px',
-  },
-  header: {
-    height: '70px',
-    marginBottom: '20px',
-    overflow: 'hidden',
-    display: '-webkit-box',
-    WebkitLineClamp: "2",
-    WebkitBoxOrient: 'vertical' as 'vertical',
-  }
-};
+import { style } from "./style";
 
 const ArticlesListGrid: FC = () => {
   const {articles, dataStatus} = useAppSelector(({articles}) => ({
@@ -64,13 +34,7 @@ const ArticlesListGrid: FC = () => {
   const isArticlesExist = Boolean(articles.length);
 
   if (!isArticlesExist) {
-    return (
-      <Grid container sx={{ flexGrow: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Typography variant={'h4'}>
-          Oops. There is no articles
-        </Typography>
-      </Grid>
-    )
+    return <NoContent contentName='articles' />
   }
 
   return (
@@ -88,19 +52,19 @@ const ArticlesListGrid: FC = () => {
             />
             <CardContent sx={style.cardContent}>
               <Typography
-                color={'textSecondary'}
+                color='textSecondary'
                 sx={style.date}
               >
-                <Typography sx={{ mr: 1 }} component={'span'}>
+                <Typography sx={{ mr: 1 }} component='span'>
                   <CalendarTodayOutlinedIcon />
                 </Typography>
-                <Typography component={'span'}>
+                <Typography component='span'>
                   {getFormattedDate(new Date(article.publishedAt), DateFormatType.MONTH_DAY_YEAR)}
                 </Typography>
               </Typography>
               <Typography
-                color={'textSecondary'}
-                variant={"body2"}
+                color='textSecondary'
+                variant='body2'
                 sx={style.header}
               >
                 <HighLighter text={article.title} />
@@ -110,7 +74,7 @@ const ArticlesListGrid: FC = () => {
             <CardActions sx={style.cardButton}>
               <Button
                 onClick={() => navigate(`/article/${index}`) }
-                variant="text"
+                variant='text'
                 endIcon={<ArrowForwardIcon />}
               >
                 Read more
