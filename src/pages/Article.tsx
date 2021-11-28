@@ -1,15 +1,22 @@
 import React, {FC} from 'react';
-import { Article } from "../common/types/article";
+import {Grid} from "@mui/material";
+import { useParams } from 'react-router-dom';
+import {useAppSelector} from "../hooks";
+import {ArticleBody} from "../components";
 
-type ArticleProps = {
-  article: Article
-}
+const Article: FC = () => {
+  const {articles} = useAppSelector(({articles}) => ({
+    articles: articles.articles
+  }));
 
-const Article: FC<ArticleProps> = ({ article }) => {
+  let { id } = useParams();
+
+  const article = articles[Number(id)]
+
   return (
-    <div>
-
-    </div>
+    <Grid container direction={'column'} sx={{ flexGrow: 1 }}>
+      <ArticleBody article={article} />
+    </Grid>
   );
 };
 
