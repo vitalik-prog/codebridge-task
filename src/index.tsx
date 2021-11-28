@@ -1,12 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import {createTheme, ThemeProvider} from "@mui/material";
+import { Provider } from "react-redux";
 import { App } from './components';
 import reportWebVitals from './reportWebVitals';
-import './assets/css/styles.scss';
-import { Provider } from "react-redux";
 import { store } from "./store";
-import {createTheme, ThemeProvider} from "@mui/material";
-import {StylesProvider} from "@mui/styles";
+import './assets/css/styles.scss';
 
 const theme = createTheme({
   typography: {
@@ -37,9 +36,7 @@ ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
       <ThemeProvider theme={theme}>
-        <StylesProvider injectFirst>
-          <App />
-        </StylesProvider>
+        <App />
       </ThemeProvider>
     </Provider>
   </React.StrictMode>,

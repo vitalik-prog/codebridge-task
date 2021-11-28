@@ -4,33 +4,12 @@ import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import InputAdornment from "@mui/material/InputAdornment";
 import SearchIcon from '@mui/icons-material/Search';
-import {useAppSelector, useDebounce} from "../../hooks";
+import Divider from "@mui/material/Divider";
 import {useDispatch} from "react-redux";
 import {getArticles} from "../../store/actions";
 import {Path} from "../../common/enums";
-import Divider from "@mui/material/Divider";
-
-const style = {
-  header: {
-    marginTop: '50px',
-    marginBottom: '10px',
-    fontSize: 16,
-    fontWeight: 700
-  },
-  input: {
-    width: '42%',
-    marginBottom: '40px',
-    backgroundColor: '#FFFFFF',
-    padding: '15px 20px',
-    border: '1px solid #EAEAEA',
-    borderRadius: '5px',
-    boxShadow: '0px 8px 24px rgba(0, 0, 0, 0.20)',
-  },
-  footer: {
-    fontSize: 16,
-    fontWeight: 700
-  }
-}
+import {useAppSelector, useDebounce} from "../../hooks";
+import { style } from './style'
 
 const SearchBlock: FC = () => {
   const {totalArticles} = useAppSelector(({articles}) => ({
