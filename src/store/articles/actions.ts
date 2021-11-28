@@ -4,19 +4,29 @@ import { ActionType } from './common';
 import { Path } from "../../common/enums/app";
 import { getRequest } from "../../helpers";
 
-const getArticles = createAsyncThunk<{ articles: Article[], keywords: string }, string, AsyncThunkConfig>(
+const getArticles = createAsyncThunk<{ articles: Article[], keywords: string, totalArticles: number }, string, AsyncThunkConfig>(
   ActionType.ARTICLES_GET,
   async (keywords, { extra }) => {
-    const keywordsQuery = keywords.split(' ').join(' AND ')
-    const gatheredTitleQueryText = `qInTitle=(${keywordsQuery})`
 
-    let response = await getRequest(`${Path.API_ARTICLES_ORIGIN_URL + gatheredTitleQueryText + Path.API_KEY}`) as ApiResponse;
-    if (response.articles.length === 0) {
-      const gatheredDescriptionText = `q="${gatheredTitleQueryText}"`
-      response = await getRequest(`${Path.API_ARTICLES_ORIGIN_URL + gatheredDescriptionText + Path.API_KEY}`) as ApiResponse;
+    const getData = async (apiKey: string) => {
+      const keywordsQuery = keywords.split(' ').join(' AND ')
+      const gatheredTitleQueryText = `qInTitle=(${keywordsQuery})`
+
+      let response = await getRequest(`${Path.API_ARTICLES_ORIGIN_URL + gatheredTitleQueryText + apiKey}`) as ApiResponse;
+      if (response.articles.length === 0) {
+        const gatheredDescriptionText = `q="${gatheredTitleQueryText}"`
+        response = await getRequest(`${Path.API_ARTICLES_ORIGIN_URL + gatheredDescriptionText + apiKey}`) as ApiResponse;
+      }
+      return response
     }
 
-    return { articles: response.articles, keywords };
+    let data = await getData(Path.API_KEY1)
+
+    window.onerror = (message) => {
+      console.log(message)
+    };
+
+    return { articles: data.articles, totalArticles: data.articles.length, keywords };
   }
 );
 

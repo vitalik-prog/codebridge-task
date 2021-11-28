@@ -6,12 +6,14 @@ import { DataStatus } from "../../common/enums/app";
 type State = {
   dataStatus: DataStatus;
   articles: Article[] | [];
-  keywords: string
+  totalArticles: number;
+  keywords: string;
 };
 
 const initialState: State = {
   dataStatus: DataStatus.IDLE,
   articles: [],
+  totalArticles: 0,
   keywords: ''
 };
 
@@ -26,6 +28,7 @@ const articlesSlice = createSlice({
     builder.addCase(getArticles.fulfilled, (state, action) => {
       state.dataStatus = DataStatus.FULFILLED;
       state.articles = action.payload.articles;
+      state.totalArticles = action.payload.totalArticles;
       state.keywords = action.payload.keywords;
     });
     builder.addCase(getArticles.rejected, (state) => {

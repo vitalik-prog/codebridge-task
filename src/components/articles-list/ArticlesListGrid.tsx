@@ -1,6 +1,6 @@
 import React, {FC, useEffect} from 'react';
 import {Button, Card, CardActions, CardContent, CardMedia, Grid, Typography} from "@mui/material";
-import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import CalendarTodayOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined';
 import LongText from "../long-text/LongText";
 import {DateFormatType} from "../../common/enums/date";
@@ -8,6 +8,7 @@ import {getFormattedDate} from "../../helpers";
 import {DEFAULT_IMAGE_URL} from "../../common/constants";
 import {useAppSelector} from "../../hooks";
 import {useDispatch} from "react-redux";
+import { useNavigate } from 'react-router-dom';
 import {getArticles} from "../../store/articles/actions";
 import {DataStatus, Path} from "../../common/enums/app";
 import {Loader} from "../index";
@@ -50,6 +51,7 @@ const ArticlesListGrid: FC = () => {
     dataStatus: articles.dataStatus,
   }));
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(getArticles(Path.API_DEFAULT_KEYWORDS_TO_FIND));
@@ -72,7 +74,7 @@ const ArticlesListGrid: FC = () => {
   }
 
   return (
-    <Grid container spacing={6}>
+    <Grid sx={{ mt: 0.01 }} container spacing={6}>
       {articles.map((article, index) => (
         <Grid item key={index} xs={12} sm={6} md={4}>
           <Card
@@ -106,7 +108,11 @@ const ArticlesListGrid: FC = () => {
               <LongText content={article.description} limit={100} />
             </CardContent>
             <CardActions sx={style.cardButton}>
-              <Button variant="text" endIcon={<ArrowRightAltIcon />}>
+              <Button
+                onClick={() => navigate(`/article/${index}`) }
+                variant="text"
+                endIcon={<ArrowForwardIcon />}
+              >
                 Read more
               </Button>
             </CardActions>

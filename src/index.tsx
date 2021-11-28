@@ -25,7 +25,8 @@ const theme = createTheme({
         root: {
           textTransform: 'none',
           fontWeight: 700,
-          fontSize: 16
+          fontSize: 16,
+          justifyContent: "flex-start"
         },
       },
     },
