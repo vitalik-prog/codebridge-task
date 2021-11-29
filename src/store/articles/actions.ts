@@ -9,7 +9,7 @@ const getArticles = createAsyncThunk<{ articles: Article[], keywords: string, to
   async (keywords, { extra }) => {
 
     const getData = async (apiKey: string) => {
-      console.log(keywords.trim())
+
       if (!keywords.trim()) {
         const response = await getRequest(`${Path.API_ARTICLES_ORIGIN_URL + apiKey}`) as ApiResponse;
         return response
