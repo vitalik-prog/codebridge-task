@@ -6,6 +6,7 @@ import {Button, CardMedia, Grid, Paper, Typography} from "@mui/material";
 import {Article} from "../../common/types/article";
 import {DEFAULT_IMAGE_URL} from "../../common/constants";
 import { style } from './style'
+import {Path} from "../../common/enums/app";
 
 type ArticleBodyProps = {
   article: Article
@@ -17,13 +18,16 @@ const ArticleBody: FC<ArticleBodyProps> = ({ article }) => {
     return <Navigate to={`/`} replace />
   }
 
+  const isImageExist = Boolean(article.multimedia && article.multimedia.length)
+  const imagePath = isImageExist ? (Path.API_IMG_ORIGIN_URL + article.multimedia[0].url) : DEFAULT_IMAGE_URL
+
   return (
     <Grid container direction='column' sx={{ flexGrow: 1 }}>
       <CardMedia
         component='img'
         sx={style.img}
-        image={article.urlToImage ? article.urlToImage : DEFAULT_IMAGE_URL}
-        alt={article.title}
+        image={imagePath}
+        alt={article.multimedia?.length ? article.multimedia[0].crop_name : ''}
       />
       <Paper elevation={1} sx={style.paper}>
         <Typography
@@ -31,14 +35,14 @@ const ArticleBody: FC<ArticleBodyProps> = ({ article }) => {
           variant='body2'
           sx={style.header}
         >
-          {article.title}
+          {article.headline.main}
         </Typography>
         <Typography
           color='primary.dark'
           variant='body2'
           sx={style.text}
         >
-          {article.content}
+          {article.lead_paragraph}
         </Typography>
       </Paper>
       <Box sx={{ pl: 18.75 }}>

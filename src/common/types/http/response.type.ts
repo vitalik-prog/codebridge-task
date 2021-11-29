@@ -1,9 +1,16 @@
-import { Article } from "../article";
+import {Article} from "../article";
 
 type ApiResponse = {
-  articles: Article[],
   status: string,
-  totalResults: number
+  copyright: string,
+  response: {
+    docs: Article[],
+    meta: {
+      hits: number,
+      offset: number,
+      time: number
+    }
+  }
 }
 
-export type { ApiResponse };
+export type {ApiResponse};

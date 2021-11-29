@@ -9,12 +9,17 @@ const getArticles = createAsyncThunk<{ articles: Article[], keywords: string, to
   async (keywords, { extra }) => {
 
     const getData = async (apiKey: string) => {
-      const keywordsQuery = keywords.split(' ').join(' AND ')
-      const gatheredTitleQueryText = `qInTitle=(${keywordsQuery})`
+      console.log(keywords.trim())
+      if (!keywords.trim()) {
+        const response = await getRequest(`${Path.API_ARTICLES_ORIGIN_URL + apiKey}`) as ApiResponse;
+        return response
+      }
 
+      const keywordsQuery = keywords.trim().split(' ').map(keyword => '"' + keyword + '"').join(' AND ')
+      const gatheredTitleQueryText = `fq=headline:(${keywordsQuery})`
       let response = await getRequest(`${Path.API_ARTICLES_ORIGIN_URL + gatheredTitleQueryText + apiKey}`) as ApiResponse;
-      if (response.articles.length === 0) {
-        const gatheredDescriptionText = `q="${gatheredTitleQueryText}"`
+      if (response.response.docs.length < 10) {
+        const gatheredDescriptionText = `q=(${keywordsQuery})`
         response = await getRequest(`${Path.API_ARTICLES_ORIGIN_URL + gatheredDescriptionText + apiKey}`) as ApiResponse;
       }
       return response
@@ -26,7 +31,7 @@ const getArticles = createAsyncThunk<{ articles: Article[], keywords: string, to
       console.log(message)
     };
 
-    return { articles: data.articles, totalArticles: data.articles.length, keywords };
+    return { articles: data.response.docs, totalArticles: data.response.docs.length, keywords };
   }
 );
 

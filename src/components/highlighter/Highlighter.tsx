@@ -1,13 +1,13 @@
 import React, {FC} from 'react';
 import {Typography} from "@mui/material";
 import {useAppSelector} from "../../hooks";
-import { style } from './style'
 
 type HighLighterProps = {
   text: string,
+  fontSize?: string
 }
 
-const HighLighter: FC<HighLighterProps> = ({ text }) => {
+const HighLighter: FC<HighLighterProps> = ({ text, fontSize = '24px' }) => {
   const {keywords} = useAppSelector(({articles}) => ({
     keywords: articles.keywords
   }));
@@ -22,8 +22,8 @@ const HighLighter: FC<HighLighterProps> = ({ text }) => {
       {textParts.map((part, i) => {
         const highlightStyle =
           keywordsParts.some(keywordsPart => part.toLowerCase() === keywordsPart.toLowerCase())
-            ? style.highlighted
-            : style.null;
+            ? {fontSize, backgroundColor: 'yellow', color: 'primary.main'}
+            : {fontSize, color: 'primary.main'};
         return (
           <Typography component='span' key={i} sx={highlightStyle}>
             {part}
