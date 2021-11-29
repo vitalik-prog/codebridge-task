@@ -1,5 +1,6 @@
-import {FC} from "react";
+import React, {FC} from "react";
 import {Typography} from "@mui/material";
+import HighLighter from "../highlighter";
 
 type LongTextProps = {
   content: string | null,
@@ -10,7 +11,7 @@ const LongText: FC<LongTextProps> = ({ content, limit}) => {
   const toShow = content ? content.substring(0, limit) + "..." : '';
   return (
     <Typography sx={{ color: 'primary.main' }}>
-      {toShow}
+      <HighLighter text={toShow} fontSize='16px' />
     </Typography>
   )
 }

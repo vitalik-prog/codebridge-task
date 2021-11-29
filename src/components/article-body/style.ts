@@ -5,9 +5,9 @@ export const style = {
     margin: 0
   },
   paper: {
-    maxWidth: '1290px',
-    marginLeft: 'auto',
-    marginRight: 'auto',
+    minWidth: '1290px',
+    marginLeft: '75px',
+    marginRight: '75px',
     marginTop: '-95px',
     marginBottom: '35px',
     padding: '0 75px 50px 75px',

@@ -1,8 +1,8 @@
 enum Path {
-  API_ARTICLES_ORIGIN_URL = 'https://newsapi.org/v2/everything?',
-  API_DEFAULT_KEYWORDS_TO_FIND = 'space',
-  API_KEY1 = '&apiKey=520e2dfb70cc4dc9ad9e58a73d211bae',
-  API_KEY2 = '&apiKey=da61aa33e6b2410583544bcaa53e9a11'
+  API_IMG_ORIGIN_URL = 'https://www.nytimes.com/',
+  API_ARTICLES_ORIGIN_URL = 'https://api.nytimes.com/svc/search/v2/articlesearch.json?',
+  API_REQUEST_WITHOUT_KEYWORDS = '',
+  API_KEY1 = '&api-key=mJbAQ54ARv599z01Na8CGNHcdTWs6B3R'
 }
 
 export { Path };

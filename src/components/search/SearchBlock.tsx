@@ -7,15 +7,15 @@ import SearchIcon from '@mui/icons-material/Search';
 import Divider from "@mui/material/Divider";
 import {useDispatch} from "react-redux";
 import {getArticles} from "../../store/actions";
-import {Path} from "../../common/enums";
 import {useAppSelector, useDebounce} from "../../hooks";
 import { style } from './style'
 
 const SearchBlock: FC = () => {
-  const {totalArticles} = useAppSelector(({articles}) => ({
-    totalArticles: articles.totalArticles
+  const {totalArticles, keywords} = useAppSelector(({articles}) => ({
+    totalArticles: articles.totalArticles,
+    keywords: articles.keywords,
   }));
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState(keywords);
   const debouncedSearchTerm = useDebounce(searchTerm, 1500);
   const dispatch = useDispatch();
 
@@ -48,7 +48,6 @@ const SearchBlock: FC = () => {
       </Typography>
       <TextField
         id="input-with-icon-textfield"
-        defaultValue={Path.API_DEFAULT_KEYWORDS_TO_FIND}
         sx={style.input}
         placeholder={'Search'}
         InputLabelProps={{
@@ -63,6 +62,7 @@ const SearchBlock: FC = () => {
           ),
         }}
         variant="standard"
+        value={searchTerm}
         onChange={e => setSearchTerm(e.target.value)}
       />
       <Typography
