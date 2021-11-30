@@ -14,7 +14,7 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 type ArticleGridItemProps = {
   article: Article,
   index: number,
-  onArticleSelect: (index: number) => void
+  onArticleSelect: (index: number) => void,
 }
 
 const ArticleGridItem: FC<ArticleGridItemProps> = ({ article, index, onArticleSelect }) => {
@@ -22,7 +22,7 @@ const ArticleGridItem: FC<ArticleGridItemProps> = ({ article, index, onArticleSe
   const imagePath = isImageExist ? (Path.API_IMG_ORIGIN_URL + article.multimedia[0].url) : DEFAULT_IMAGE_URL
 
   return (
-    <Grid item xs={12} sm={6} md={4}>
+    <Grid item xs={12} sm={6} md={4} sx={{ pt: '0px' }}>
       <Card
         sx={style.card}
       >
