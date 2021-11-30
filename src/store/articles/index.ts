@@ -8,13 +8,17 @@ type State = {
   articles: Article[] | [];
   totalArticles: number;
   keywords: string;
+  pageNumber: number;
+  hasMoreArticles: boolean;
 };
 
 const initialState: State = {
   dataStatus: DataStatus.IDLE,
   articles: [],
   totalArticles: 0,
-  keywords: ''
+  keywords: '',
+  pageNumber: 0,
+  hasMoreArticles: true,
 };
 
 const articlesSlice = createSlice({
@@ -22,7 +26,7 @@ const articlesSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(getArticles.pending, (state) => {
+    builder.addCase(getArticles.pending, (state, action) => {
       state.dataStatus = DataStatus.PENDING;
     });
     builder.addCase(getArticles.fulfilled, (state, action) => {
@@ -30,6 +34,8 @@ const articlesSlice = createSlice({
       state.articles = action.payload.articles;
       state.totalArticles = action.payload.totalArticles;
       state.keywords = action.payload.keywords;
+      state.pageNumber = action.payload.pageNumber;
+      state.hasMoreArticles = action.payload.hasMoreArticles;
     });
     builder.addCase(getArticles.rejected, (state) => {
       state.dataStatus = DataStatus.REJECTED;

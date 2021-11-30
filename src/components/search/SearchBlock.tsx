@@ -11,25 +11,22 @@ import {useAppSelector, useDebounce} from "../../hooks";
 import { style } from './style'
 
 const SearchBlock: FC = () => {
-  const {totalArticles, keywords} = useAppSelector(({articles}) => ({
+  const {totalArticles, keywords, pageNumber} = useAppSelector(({articles}) => ({
     totalArticles: articles.totalArticles,
     keywords: articles.keywords,
+    pageNumber: articles.pageNumber,
   }));
   const [searchTerm, setSearchTerm] = useState(keywords);
   const debouncedSearchTerm = useDebounce(searchTerm, 1500);
   const dispatch = useDispatch();
 
   useEffect(() => {
-      if (debouncedSearchTerm) {
-        dispatch(getArticles(debouncedSearchTerm))
-      }
-    },
-    [debouncedSearchTerm, dispatch]
-  );
+    dispatch(getArticles({keywords: debouncedSearchTerm, pageNumber}))
+  }, [dispatch, debouncedSearchTerm]);
 
   const enterPressCatcher = useCallback(e => {
     if (e.key === 'Enter') {
-      dispatch(getArticles(searchTerm))
+      dispatch(getArticles({keywords: searchTerm, pageNumber}))
     }
   }, [dispatch, searchTerm])
 
@@ -39,7 +36,7 @@ const SearchBlock: FC = () => {
   }, [enterPressCatcher])
 
   return (
-    <Grid container direction={'column'}>
+    <Grid container direction='column'>
       <Typography
         component={'span'}
         sx={style.header}
@@ -47,26 +44,26 @@ const SearchBlock: FC = () => {
         Filter by keywords
       </Typography>
       <TextField
-        id="input-with-icon-textfield"
+        id='input-with-icon-textfield'
         sx={style.input}
-        placeholder={'Search'}
+        placeholder='Search'
         InputLabelProps={{
           shrink: true,
         }}
         InputProps={{
           disableUnderline: true,
           startAdornment: (
-            <InputAdornment position="start">
+            <InputAdornment position='start'>
               <SearchIcon />
             </InputAdornment>
           ),
         }}
-        variant="standard"
+        variant='standard'
         value={searchTerm}
         onChange={e => setSearchTerm(e.target.value)}
       />
       <Typography
-        component={'span'}
+        component='span'
         sx={style.footer}
       >
         Results: {totalArticles}
