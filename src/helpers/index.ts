@@ -1,2 +1,2 @@
 export { getFormattedDate } from './getFormattedDate';
-export { getRequest } from './getRequest';
+export { getData } from './getRequest';
