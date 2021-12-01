@@ -1,3 +1,3 @@
-export type { Article, GetArticlesPayload, GetArticlesResult } from './article'
+export type { Article, GetArticlesPayload, GetArticlesResult, GetMoreArticlesResult, GetMoreArticlesPayload } from './article'
 export type { AppDispatch, AsyncThunkConfig, RootState } from './app'
 export type { ApiResponse } from './http'

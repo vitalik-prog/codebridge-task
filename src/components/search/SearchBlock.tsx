@@ -11,7 +11,7 @@ import {useAppSelector, useDebounce} from "../../hooks";
 import { style } from './style'
 
 const SearchBlock: FC = () => {
-  const {totalArticles, keywords, pageNumber} = useAppSelector(({articles}) => ({
+  const {totalArticles, keywords} = useAppSelector(({articles}) => ({
     totalArticles: articles.totalArticles,
     keywords: articles.keywords,
     pageNumber: articles.pageNumber,
@@ -21,12 +21,12 @@ const SearchBlock: FC = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getArticles({keywords: debouncedSearchTerm, pageNumber}))
+    dispatch(getArticles({keywords: debouncedSearchTerm}))
   }, [dispatch, debouncedSearchTerm]);
 
   const enterPressCatcher = useCallback(e => {
     if (e.key === 'Enter') {
-      dispatch(getArticles({keywords: searchTerm, pageNumber}))
+      dispatch(getArticles({keywords: searchTerm}))
     }
   }, [dispatch, searchTerm])
 

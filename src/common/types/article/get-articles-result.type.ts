@@ -4,7 +4,6 @@ type GetArticlesResult = {
   articles: Article[],
   keywords: string,
   totalArticles: number,
-  pageNumber: number,
   hasMoreArticles: boolean
 }
 

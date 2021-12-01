@@ -1,47 +1,52 @@
-import { createAsyncThunk } from '@reduxjs/toolkit';
-import { AsyncThunkConfig, ApiResponse, GetArticlesPayload, GetArticlesResult } from '../../common/types';
+import {createAction, createAsyncThunk} from '@reduxjs/toolkit';
+import {
+  AsyncThunkConfig,
+  GetArticlesPayload,
+  GetArticlesResult,
+  GetMoreArticlesResult, GetMoreArticlesPayload
+} from '../../common/types';
 import { ActionType } from './common';
 import { Path } from "../../common/enums/app";
-import { getRequest } from "../../helpers";
+import { getData } from "../../helpers";
 
 const getArticles = createAsyncThunk<GetArticlesResult, GetArticlesPayload, AsyncThunkConfig>(
   ActionType.ARTICLES_GET,
-  async (payload, { getState }) => {
-    const { keywords, pageNumber} = payload
-    const pageNumberText = `&page=${pageNumber}`
-    const articles = getState().articles.articles
-    const prevPageNumber = getState().articles.pageNumber
+  async (payload, { extra }) => {
+    const { keywords } = payload
 
-    const getData = async (apiKey: string) => {
-      if (!keywords.trim()) {
-        const response = await getRequest(`${Path.API_ARTICLES_ORIGIN_URL + pageNumberText + apiKey}`) as ApiResponse;
-        return response
-      }
-
-      const keywordsQuery = keywords.trim().split(' ').map(keyword => '"' + keyword + '"').join(' AND ')
-      const gatheredTitleQueryText = `&fq=headline:(${keywordsQuery})`
-      let response = await getRequest(`${Path.API_ARTICLES_ORIGIN_URL + pageNumberText + gatheredTitleQueryText + apiKey}`) as ApiResponse;
-      if (response.response.docs.length < 10) {
-        const gatheredDescriptionText = `&q=(${keywordsQuery})`
-        response = await getRequest(`${Path.API_ARTICLES_ORIGIN_URL+ pageNumberText + gatheredDescriptionText + apiKey}`) as ApiResponse;
-      }
-      return response
-    }
-
-    let data = await getData(Path.API_KEY1)
-    const newArticles = pageNumber !== prevPageNumber
-      ? [...articles, ...data.response.docs]
-      : data.response.docs
+    let data = await getData(Path.API_KEY1, keywords)
+    const newArticles = data.response.docs
     const hasMoreArticles = newArticles.length < data.response.meta.hits
 
     return {
       articles: newArticles,
       totalArticles: data.response.meta.hits,
       keywords,
+      hasMoreArticles
+    };
+  }
+);
+
+const getMoreArticles = createAsyncThunk<GetMoreArticlesResult, GetMoreArticlesPayload, AsyncThunkConfig>(
+  ActionType.ARTICLES_GET_MORE,
+  async (payload, { getState }) => {
+    const { pageNumber } = payload
+
+    const articles = getState().articles.articles
+    const keywords = getState().articles.keywords
+
+    let data = await getData(Path.API_KEY1, keywords, pageNumber)
+    const newArticles = [...articles, ...data.response.docs]
+    const hasMoreArticles = newArticles.length < data.response.meta.hits
+
+    return {
+      articles: newArticles,
       pageNumber,
       hasMoreArticles
     };
   }
 );
 
-export { getArticles };
+const resetArticles = createAction(ActionType.RESET_ARTICLES);
+
+export { getArticles, resetArticles, getMoreArticles };

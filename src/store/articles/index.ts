@@ -1,10 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { Article } from '../../common/types';
-import { getArticles } from './actions';
+import {getArticles, getMoreArticles, resetArticles} from './actions';
 import { DataStatus } from "../../common/enums/app";
 
 type State = {
   dataStatus: DataStatus;
+  loadingMoreArticles: DataStatus;
   articles: Article[] | [];
   totalArticles: number;
   keywords: string;
@@ -14,6 +15,7 @@ type State = {
 
 const initialState: State = {
   dataStatus: DataStatus.IDLE,
+  loadingMoreArticles: DataStatus.IDLE,
   articles: [],
   totalArticles: 0,
   keywords: '',
@@ -34,11 +36,24 @@ const articlesSlice = createSlice({
       state.articles = action.payload.articles;
       state.totalArticles = action.payload.totalArticles;
       state.keywords = action.payload.keywords;
-      state.pageNumber = action.payload.pageNumber;
       state.hasMoreArticles = action.payload.hasMoreArticles;
     });
     builder.addCase(getArticles.rejected, (state) => {
       state.dataStatus = DataStatus.REJECTED;
+    });
+    builder.addCase(getMoreArticles.pending, (state, action) => {
+      state.loadingMoreArticles = DataStatus.PENDING;
+    });
+    builder.addCase(getMoreArticles.fulfilled, (state, action) => {
+      state.loadingMoreArticles = DataStatus.FULFILLED;
+      state.articles = action.payload.articles;
+      state.hasMoreArticles = action.payload.hasMoreArticles;
+    });
+    builder.addCase(getMoreArticles.rejected, (state) => {
+      state.loadingMoreArticles = DataStatus.REJECTED;
+    });
+    builder.addCase(resetArticles, (state) => {
+      state.articles = [];
     });
   },
 });
