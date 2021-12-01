@@ -48,6 +48,7 @@ const articlesSlice = createSlice({
       state.loadingMoreArticles = DataStatus.FULFILLED;
       state.articles = action.payload.articles;
       state.hasMoreArticles = action.payload.hasMoreArticles;
+      state.pageNumber = action.payload.pageNumber;
     });
     builder.addCase(getMoreArticles.rejected, (state) => {
       state.loadingMoreArticles = DataStatus.REJECTED;

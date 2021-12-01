@@ -31,7 +31,7 @@ const ArticlesGridList: FC = () => {
     }
     observer.current = new IntersectionObserver(entries => {
       if (entries[0].isIntersecting && hasMoreArticles) {
-        dispatch(getMoreArticles({pageNumber: pageNumber + 1}))
+        dispatch(getMoreArticles())
       }
     })
     if (node) {

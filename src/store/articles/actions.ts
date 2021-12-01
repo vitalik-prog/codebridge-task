@@ -3,7 +3,7 @@ import {
   AsyncThunkConfig,
   GetArticlesPayload,
   GetArticlesResult,
-  GetMoreArticlesResult, GetMoreArticlesPayload
+  GetMoreArticlesResult
 } from '../../common/types';
 import { ActionType } from './common';
 import { Path } from "../../common/enums/app";
@@ -27,13 +27,13 @@ const getArticles = createAsyncThunk<GetArticlesResult, GetArticlesPayload, Asyn
   }
 );
 
-const getMoreArticles = createAsyncThunk<GetMoreArticlesResult, GetMoreArticlesPayload, AsyncThunkConfig>(
+const getMoreArticles = createAsyncThunk<GetMoreArticlesResult, undefined, AsyncThunkConfig>(
   ActionType.ARTICLES_GET_MORE,
-  async (payload, { getState }) => {
-    const { pageNumber } = payload
+  async (_args, { getState }) => {
 
     const articles = getState().articles.articles
     const keywords = getState().articles.keywords
+    const pageNumber = getState().articles.pageNumber + 1
 
     let data = await getData(Path.API_KEY1, keywords, pageNumber)
     const newArticles = [...articles, ...data.response.docs]
